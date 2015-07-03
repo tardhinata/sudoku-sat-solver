@@ -45,20 +45,11 @@ def solve_problem(problemset):
     print('Answer:')
     pprint(problemset)  
     
-def v(i, j, d):
-    """
-    Return the number of the variable of cell i, j and digit d,
-    which is an integer in the range of 1 to 729 (including).
-    """
+def v(i, j, d): 
     return 81 * (i - 1) + 9 * (j - 1) + d
 
-
-def sudoku_clauses():
-    """
-    Create the (11745) Sudoku clauses, and return them as a list.
-    Note that these clauses are *independent* of the particular
-    Sudoku puzzle at hand.
-    """
+#Reduces Sudoku problem to a SAT clauses 
+def sudoku_clauses(): 
     res = []
     # for all cells, ensure that the each cell:
     for i in range(1, 10):
@@ -70,10 +61,7 @@ def sudoku_clauses():
                 for dp in range(d + 1, 10):
                     res.append([-v(i, j, d), -v(i, j, dp)])
 
-    def valid(cells):
-        # Append 324 clauses, corresponding to 9 cells, to the result.
-        # The 9 cells are represented by a list tuples.  The new clauses
-        # ensure that the cells contain distinct values.
+    def valid(cells): 
         for i, xi in enumerate(cells):
             for j, xj in enumerate(cells):
                 if i < j:
@@ -84,6 +72,7 @@ def sudoku_clauses():
     for i in range(1, 10):
         valid([(i, j) for j in range(1, 10)])
         valid([(j, i) for j in range(1, 10)])
+        
     # ensure 3x3 sub-grids "regions" have distinct values
     for i in 1, 4, 7:
         for j in 1, 4 ,7:
@@ -93,9 +82,7 @@ def sudoku_clauses():
     return res
 
 def solve(grid):
-    """
-    solve a Sudoku grid inplace
-    """
+    #solve a Sudoku problem
     clauses = sudoku_clauses()
     for i in range(1, 10):
         for j in range(1, 10):
